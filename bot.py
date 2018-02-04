@@ -14,18 +14,15 @@ def kek(message):
 
 @bot.message_handler(commands=['flood'])
 def flood(message):
-    bot.send_message(message.chat.id, 'Сколько?')
-    @bot.message_handler(content_types=['text'])
-    def flooding(message):
-        try:
-            len = int(message.text)
-            rus_letters = 'авып'
-            bot.send_message(message.chat.id, len)
-            for i in range(0,len):
-                ls = ''.join(choice(rus_letters) for i in range(randint(2,4)))
-                bot.send_message(message.chat.id, ls)
-        except:
-            bot.send_message(message.chat.id, 'Не могу в численный тип данных')
+    smpl = message.text.split(' ')
+    try:
+        lim = int(smpl[1])
+        rus_flood_letters = 'авып'
+        for i in range(0, lim):
+            ls = ''.join(choice(rus_flood_letters) for i in range(randint(2, 4)))
+            bot.send_message(message.chat.id, ls)
+    except:
+        bot.send_message(message.chat.id, 'Не могу определить количество. Формат команды: /flood <кол-во сообщений>')
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
