@@ -4,6 +4,8 @@ import telebot
 
 from random import choice
 from random import randint
+from linkparser import LinkHTMLParser
+from time import sleep
 
 
 bot = telebot.TeleBot(config.token)
@@ -17,12 +19,23 @@ def flood(message):
     smpl = message.text.split(' ')
     try:
         lim = int(smpl[1])
-        rus_flood_letters = 'авып'
-        for i in range(0, lim):
-            ls = ''.join(choice(rus_flood_letters) for i in range(randint(2, 4)))
-            bot.send_message(message.chat.id, ls)
+        if(lim<100):
+            rus_flood_letters = 'авып'
+            for i in range(0, lim):
+                ls = ''.join(choice(rus_flood_letters) for i in range(randint(2, 4)))
+                bot.send_message(message.chat.id, ls)
+                sleep(0.2)
+        else:
+            bot.send_message(message.chat.id,'Слишком большое количество сообщений. Допускается меньше 100.')
     except:
         bot.send_message(message.chat.id, 'Не могу определить количество. Формат команды: /flood <кол-во сообщений>')
+
+@bot.message_handler(commands=['links'])
+def getting_links(message):
+    link = message.text.split()[1]
+    p = LinkHTMLParser(link)
+    bot.send_message(message.chat.id, p.get_links())
+    p.__del__()
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
