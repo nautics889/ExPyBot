@@ -46,58 +46,14 @@ def leeting(message):
     input_str = message.text[5:]
     bot.send_message(message.chat.id, leet.transformToLeet(input_str))
 
-@bot.inline_handler(func=lambda query: len(query.query) > 0)
-def query_text(query):
-    digits_pattern = re.compile(r'^[0-9]+ [0-9]+$', re.MULTILINE)
-    try:
-        matches = re.match(digits_pattern, query.query)
-    except AttributeError as ex:
-        return
 
+@bot.message_handler(commands=['game'])
+def any_msg(message):
+    keyboard = types.InlineKeyboardMarkup()
+    url_button = types.InlineKeyboardButton(text="Flappy Tarasov", url="http://inspiring-easley-168036.bitballoon.com")
+    keyboard.add(url_button)
+    bot.send_message(message.chat.id, "Сыграть в игру...", reply_markup=keyboard)
 
-    try:
-        num1, num2 = matches.group().split()
-        m_sum = int(num1) + int(num2)
-        r_sum = types.InlineQueryResultArticle(
-            id='1', title="Сумма",
-            # Описание отображается в подсказке,
-            # message_text - то, что будет отправлено в виде сообщения
-            description="Результат: {!s}".format(m_sum),
-            input_message_content=types.InputTextMessageContent(
-                message_text="{!s} + {!s} = {!s}".format(num1, num2, m_sum))
-        )
-        m_sub = int(num1) - int(num2)
-        r_sub = types.InlineQueryResultArticle(
-            id='2', title="Разность",
-            description="Результат: {!s}".format(m_sub),
-            input_message_content=types.InputTextMessageContent(
-                message_text="{!s} - {!s} = {!s}".format(num1, num2, m_sub))
-        )
-        # Учтем деление на ноль и подготовим 2 варианта развития событий
-        if num2 is not "0":
-            m_div = int(num1) / int(num2)
-            r_div = types.InlineQueryResultArticle(
-                id='3', title="Частное",
-                description="Результат: {0:.2f}".format(m_div),
-                input_message_content=types.InputTextMessageContent(
-                    message_text="{0!s} / {1!s} = {2:.2f}".format(num1, num2, m_div))
-            )
-        else:
-            r_div = types.InlineQueryResultArticle(
-                id='3', title="Частное", description="На ноль делить нельзя!",
-                input_message_content=types.InputTextMessageContent(
-                    message_text="Я нехороший человек и делю на ноль!")
-            )
-        m_mul = int(num1) * int(num2)
-        r_mul = types.InlineQueryResultArticle(
-            id='4', title="Произведение",
-            description="Результат: {!s}".format(m_mul),
-            input_message_content=types.InputTextMessageContent(
-                message_text="{!s} * {!s} = {!s}".format(num1, num2, m_mul))
-        )
-        bot.answer_inline_query(query.id, [r_sum, r_sub, r_div, r_mul])
-    except Exception as e:
-        print("{!s}\n{!s}".format(type(e), str(e)))
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)

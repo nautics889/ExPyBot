@@ -11,7 +11,6 @@ class LinkHTMLParser(HTMLParser):
         super().__init__(*args, **kwargs)
         # при инициализации "скармливаем" парсеру содержимое страницы
         self.feed(self.read_site_content())
-        # записываем список ссылок в файл
 
     def handle_starttag(self, tag, attrs):
         # проверяем является ли тэг тэгом ссылки
