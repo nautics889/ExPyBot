@@ -46,14 +46,13 @@ def leeting(message):
     input_str = message.text[5:]
     bot.send_message(message.chat.id, leet.transformToLeet(input_str))
 
-
 @bot.message_handler(commands=['game'])
 def any_msg(message):
-    keyboard = types.InlineKeyboardMarkup()
-    url_button = types.InlineKeyboardButton(text="Flappy Tarasov", url="http://inspiring-easley-168036.bitballoon.com")
-    keyboard.add(url_button)
-    bot.send_message(message.chat.id, "Сыграть в игру...", reply_markup=keyboard)
+    bot.send_game(message.chat.id, 'FlappyTar')
 
+@bot.callback_query_handler(func=lambda call: True)
+def callback_answer (query):
+    bot.answer_callback_query(callback_query_id=query.id, url='http://inspiring-easley-168036.bitballoon.com')
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
