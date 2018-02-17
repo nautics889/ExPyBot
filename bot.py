@@ -67,5 +67,15 @@ def qwe(message):
         cur = db_obj.cursor()
         cur.execute('INSERT INTO numbers VALUES (?)', (message.contact.phone_number,))
 
+@bot.inline_handler(func=lambda query: True)
+def inline_mode(query):
+    capibara1 = types.InlineQueryResultCachedPhoto(
+        id="1",
+        photo_file_id="id",
+        caption="Это капибара №1"
+    )
+    bot.answer_inline_query(query.id, capibara1)
+
+
 if __name__ == '__main__':
     bot.polling(none_stop=True)

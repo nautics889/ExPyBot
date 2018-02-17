@@ -18,7 +18,7 @@ class LinkHTMLParser(HTMLParser):
             # находим аттрибут адреса ссылки
             for attr in attrs:
                 if attr[0] == 'href':
-                    # проверяем эту ссылку методом validate() (мы его еще напишем)
+                    # проверяем эту ссылку методом validate()
                     if not self.validate(attr[0]):
                         # вставляем адрес в список ссылок
                         if self.validate_link(attr[1]):
