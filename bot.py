@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 import config
 import telebot
-import time
-import re
 import leet
+import sqlite3 as lite
 
 from random import choice
 from random import randint
 from telebot import types
 from linkparser import LinkHTMLParser
 from time import sleep
-
 
 bot = telebot.TeleBot(config.token)
 
@@ -53,6 +51,21 @@ def any_msg(message):
 @bot.callback_query_handler(func=lambda call: True)
 def callback_answer (query):
     bot.answer_callback_query(callback_query_id=query.id, url='http://inspiring-easley-168036.bitballoon.com')
+
+@bot.message_handler(commands=['add_phone_number'])
+def geophone(message):
+    keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    button_phone = types.KeyboardButton(text="Отправить номер", request_contact=True)
+    keyboard.add(button_phone)
+    bot.send_message(message.chat.id, 'Отправить номер телефона в БД ', reply_markup=keyboard)
+
+@bot.message_handler(content_types=['contact'])
+def qwe(message):
+    print(message.contact.phone_number)
+    db_obj = lite.connect(config.db_name)
+    with db_obj:
+        cur = db_obj.cursor()
+        cur.execute('INSERT INTO numbers VALUES (?)', (message.contact.phone_number,))
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
