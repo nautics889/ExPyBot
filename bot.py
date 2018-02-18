@@ -59,23 +59,19 @@ def geophone(message):
     keyboard.add(button_phone)
     bot.send_message(message.chat.id, 'Отправить номер телефона в БД ', reply_markup=keyboard)
 
-@bot.message_handler(content_types=['contact'])
-def qwe(message):
-    print(message.contact.phone_number)
-    db_obj = lite.connect(config.db_name)
-    with db_obj:
-        cur = db_obj.cursor()
-        cur.execute('INSERT INTO numbers VALUES (?)', (message.contact.phone_number,))
-
 @bot.inline_handler(func=lambda query: True)
 def inline_mode(query):
     capibara1 = types.InlineQueryResultCachedPhoto(
         id="1",
-        photo_file_id="id",
-        caption="Это капибара №1"
+        photo_file_id="AgADAgADq6kxG_UDUEhVQs-boPevsaMLMw4ABJjMgNMwUdhohDAEAAEC",
+        caption="ЭНИГМА"
     )
-    bot.answer_inline_query(query.id, capibara1)
+    bot.answer_inline_query(query.id, [capibara1, ])
 
+@bot.message_handler(content_types=['photo'])
+def get_file_id(message):
+    bot.send_message(message.chat.id, str(message.photo[-1].file_id))
+    bot.reply_to(message, 'File has been saved')
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
