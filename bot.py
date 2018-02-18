@@ -52,13 +52,6 @@ def any_msg(message):
 def callback_answer (query):
     bot.answer_callback_query(callback_query_id=query.id, url='http://inspiring-easley-168036.bitballoon.com')
 
-@bot.message_handler(commands=['add_phone_number'])
-def geophone(message):
-    keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-    button_phone = types.KeyboardButton(text="Отправить номер", request_contact=True)
-    keyboard.add(button_phone)
-    bot.send_message(message.chat.id, 'Отправить номер телефона в БД ', reply_markup=keyboard)
-
 @bot.inline_handler(func=lambda query: True)
 def inline_mode(query):
     capibara1 = types.InlineQueryResultCachedPhoto(
