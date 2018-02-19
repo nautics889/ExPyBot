@@ -54,5 +54,7 @@ def any_msg(message):
 def callback_answer (query):
     bot.answer_callback_query(callback_query_id=query.id, url='http://inspiring-easley-168036.bitballoon.com')
 
+#Test
+
 if __name__ == '__main__':
     bot.polling(none_stop=True)
